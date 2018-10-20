@@ -2,10 +2,9 @@ package si.nimbostratuz.bikeshare.models.entities;
 
 import lombok.Data;
 import si.nimbostratuz.bikeshare.models.common.Location;
-import si.nimbostratuz.bikeshare.models.common.Owner;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.util.Date;
 
 @Entity(name = "bicycle")
 @Data
@@ -24,8 +23,10 @@ public class Bicycle {
     @Column(name = "available", nullable = false)
     private Boolean available;
 
-    private Instant dateAdded;
+    @Column(name = "date_added")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateAdded;
 
-    @Embedded
-    private Owner ownerId;
+    @Column(name = "owner_id")
+    private Integer ownerId;
 }

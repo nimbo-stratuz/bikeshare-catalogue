@@ -5,13 +5,18 @@ import lombok.Data;
 import javax.ws.rs.core.Response;
 
 @Data
-public class ApiStatusResponseDTO {
+public class ApiStatusDTO {
 
     private Integer status;
     private String message;
 
-    public ApiStatusResponseDTO(Response.Status status, String message) {
+    public ApiStatusDTO(Response.Status status, String message) {
         this.status = status.getStatusCode();
+        this.message = message;
+    }
+
+    public ApiStatusDTO(Integer status, String message) {
+        this.status = status;
         this.message = message;
     }
 }

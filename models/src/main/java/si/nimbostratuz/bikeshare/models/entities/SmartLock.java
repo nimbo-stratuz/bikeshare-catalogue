@@ -1,7 +1,6 @@
 package si.nimbostratuz.bikeshare.models.entities;
 
 import lombok.Data;
-import si.nimbostratuz.bikeshare.models.common.Owner;
 
 import javax.persistence.*;
 
@@ -16,6 +15,6 @@ public class SmartLock {
     @OneToOne(targetEntity = Bicycle.class, fetch = FetchType.EAGER)
     private Bicycle bicycle;
 
-    @Embedded
-    private Owner owner;
+    @Column(name = "owner_id")
+    private Integer ownerId;
 }
