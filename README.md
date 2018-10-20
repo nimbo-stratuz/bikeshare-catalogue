@@ -1,1 +1,1 @@
-# bikeshare-registration
+# bikeshare-catalogue
