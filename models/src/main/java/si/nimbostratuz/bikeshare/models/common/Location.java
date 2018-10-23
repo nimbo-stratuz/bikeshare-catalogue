@@ -10,8 +10,8 @@ import javax.persistence.Embeddable;
 public class Location {
 
     @Column(name = "location_lat", nullable = false)
-    Double latitude;
+    private Double latitude;
 
     @Column(name = "location_lng", nullable = false)
-    Double longitude;
+    private Double longitude;
 }
