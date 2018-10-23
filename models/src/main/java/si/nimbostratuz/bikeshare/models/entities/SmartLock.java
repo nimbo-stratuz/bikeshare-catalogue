@@ -12,9 +12,9 @@ public class SmartLock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(targetEntity = Bicycle.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = Bicycle.class, fetch = FetchType.EAGER, optional = false)
     private Bicycle bicycle;
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     private Integer ownerId;
 }

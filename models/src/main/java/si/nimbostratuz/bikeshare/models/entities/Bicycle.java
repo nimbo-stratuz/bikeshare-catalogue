@@ -14,7 +14,7 @@ public class Bicycle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(targetEntity = SmartLock.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = SmartLock.class, fetch = FetchType.EAGER, optional = false)
     private SmartLock smartLock;
 
     @Embedded
@@ -23,10 +23,10 @@ public class Bicycle {
     @Column(name = "available", nullable = false)
     private Boolean available;
 
-    @Column(name = "date_added")
+    @Column(name = "date_added", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateAdded;
 
-    @Column(name = "owner_id")
+    @Column(name = "owner_id", nullable = false)
     private Integer ownerId;
 }

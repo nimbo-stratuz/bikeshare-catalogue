@@ -5,6 +5,7 @@
 
         <class>si.nimbostratuz.bikeshare.models.entities.Bicycle</class>
         <class>si.nimbostratuz.bikeshare.models.entities.SmartLock</class>
+        <class>si.nimbostratuz.bikeshare.models.entities.Rental</class>
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
