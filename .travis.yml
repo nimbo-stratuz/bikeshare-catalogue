@@ -14,8 +14,9 @@ cache:
   - $HOME/.m2
 
 env:
-- DOCKER_IMAGE=nimbostratuz/bikeshare-catalogue
-- IMAGE_VERSION=0.1
+  global:
+  - DOCKER_IMAGE=nimbostratuz/bikeshare-catalogue
+  - IMAGE_VERSION=0.1
 
 script:
 - mvn clean package -U
@@ -23,4 +24,4 @@ script:
 
 after_success:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- docker push "$DOCKER_IMAGE"
+- docker push "$DOCKER_IMAGE:$IMAGE_VERSION" && docker push "$DOCKER_IMAGE:latest"
