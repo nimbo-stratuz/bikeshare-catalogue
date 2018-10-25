@@ -19,4 +19,8 @@ public class ApiStatusDTO {
         this.status = status;
         this.message = message;
     }
+
+    public Response asResponse() {
+        return Response.status(this.status).entity(this).build();
+    }
 }

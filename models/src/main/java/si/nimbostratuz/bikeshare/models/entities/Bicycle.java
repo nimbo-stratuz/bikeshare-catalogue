@@ -8,14 +8,24 @@ import java.util.Date;
 
 @Entity(name = "bicycle")
 @Data
+@NamedQueries(value = {
+        @NamedQuery(
+                name = "Bicycle.getAll",
+                query = "SELECT o FROM bicycle o"
+        ),
+        @NamedQuery(
+                name = "Bicycle.findBySmartLockUUID",
+                query = "SELECT o FROM bicycle o WHERE o.smartLockUUID = :smartLockUUID"
+        )
+})
 public class Bicycle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(targetEntity = SmartLock.class, fetch = FetchType.EAGER, optional = false)
-    private SmartLock smartLock;
+    @Column(name = "smart_lock_uuid", nullable = false, unique = true)
+    private String smartLockUUID;
 
     @Embedded
     private Location location;
