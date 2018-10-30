@@ -4,14 +4,14 @@ import lombok.Data;
 import si.nimbostratuz.bikeshare.models.common.Location;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.Instant;
 
 @Entity(name = "bicycle")
 @Data
 @NamedQueries(value = {
         @NamedQuery(
                 name = "Bicycle.getAll",
-                query = "SELECT o FROM bicycle o"
+                query = "SELECT b FROM bicycle b"
         ),
         @NamedQuery(
                 name = "Bicycle.findBySmartLockUUID",
@@ -34,8 +34,7 @@ public class Bicycle {
     private Boolean available;
 
     @Column(name = "date_added", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dateAdded;
+    private Instant dateAdded;
 
     @Column(name = "owner_id", nullable = false)
     private Integer ownerId;
