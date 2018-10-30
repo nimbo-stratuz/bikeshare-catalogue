@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  db-pgsql:
+  bikeshare-catalogue.db:
     image: postgres:alpine
     restart: always
     ports:
@@ -9,4 +9,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bikeshare
+      POSTGRES_DB: bikeshare-catalogue
+
+networks:
+  default:
+    external:
+      name: bikeshare
