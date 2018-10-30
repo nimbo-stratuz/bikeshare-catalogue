@@ -1,6 +1,6 @@
 package si.nimbostratuz.bikeshare.services.producers;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
@@ -13,7 +13,7 @@ public class PersistenceProducer {
     private EntityManagerFactory emf;
 
     @Produces
-    @ApplicationScoped
+    @RequestScoped
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

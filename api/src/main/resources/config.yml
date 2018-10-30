@@ -9,7 +9,7 @@ kumuluzee:
       port: 8080
   datasources:
   - jndi-name: jdbc/BikeshareCatalogueDS
-    connection-url: jdbc:postgresql://localhost:5432/bikeshare
+    connection-url: jdbc:postgresql://localhost:5432/bikeshare-catalogue
     username: postgres
     password: postgres
     max-pool-size: 20

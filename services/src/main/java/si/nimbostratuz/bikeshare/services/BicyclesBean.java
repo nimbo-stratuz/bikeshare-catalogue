@@ -3,16 +3,15 @@ package si.nimbostratuz.bikeshare.services;
 import lombok.extern.java.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @Log
-@ApplicationScoped
+@RequestScoped
 public class BicyclesBean extends EntityBean<Bicycle> {
 
     public List<Bicycle> getAll() {
@@ -56,7 +55,7 @@ public class BicyclesBean extends EntityBean<Bicycle> {
         try {
             beginTx();
 
-            bicycle.setDateAdded(Date.from(Instant.now()));
+            bicycle.setDateAdded(Instant.now());
             bicycle.setAvailable(false);
 
             em.persist(bicycle);

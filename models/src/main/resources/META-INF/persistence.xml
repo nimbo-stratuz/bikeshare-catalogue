@@ -4,7 +4,8 @@
         <non-jta-data-source>jdbc/BikeshareCatalogueDS</non-jta-data-source>
 
         <class>si.nimbostratuz.bikeshare.models.entities.Bicycle</class>
-        <class>si.nimbostratuz.bikeshare.models.entities.Rental</class>
+
+        <class>si.nimbostratuz.bikeshare.models.converters.InstantAttributeConverter</class>
 
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
