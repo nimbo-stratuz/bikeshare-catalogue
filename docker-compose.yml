@@ -26,6 +26,24 @@ services:
       -initial-cluster node1=http://etcd:2380
       -cors="*"
 
+  bikeshare-rental.service:
+    image: nimbostratuz/bikeshare-rental
+    ports:
+    - 8081:8081
+    environment:
+      KUMULUZEE_DATASOURCES0_CONNECTIONURL: jdbc:postgresql://bikeshare-rental.db.bikeshare:5432/bikeshare-rental
+    depends_on:
+    - bikeshare-rental.db
+    - etcd
+
+  bikeshare-rental.db:
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bikeshare-rental
+
 networks:
   default:
     external:
