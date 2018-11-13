@@ -4,6 +4,8 @@ import lombok.extern.java.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -12,7 +14,10 @@ import java.util.List;
 
 @Log
 @RequestScoped
-public class BicyclesBean extends EntityBean<Bicycle> {
+public class BicyclesBean {
+
+    @Inject
+    protected EntityManager em;
 
     public List<Bicycle> getAll() {
 
@@ -46,7 +51,6 @@ public class BicyclesBean extends EntityBean<Bicycle> {
         }
     }
 
-    @Override
     public Bicycle create(Bicycle bicycle) {
 
         // Workaround
@@ -70,7 +74,6 @@ public class BicyclesBean extends EntityBean<Bicycle> {
         return bicycle;
     }
 
-    @Override
     public Bicycle update(Integer id, Bicycle bicycle) {
 
         Bicycle originalBicycle = this.get(id);
@@ -88,7 +91,6 @@ public class BicyclesBean extends EntityBean<Bicycle> {
         return bicycle;
     }
 
-    @Override
     public void delete(Integer id) {
 
         Bicycle bicycle = this.get(id);
@@ -103,4 +105,18 @@ public class BicyclesBean extends EntityBean<Bicycle> {
         }
     }
 
+    protected void beginTx() {
+        if (!em.getTransaction().isActive())
+            em.getTransaction().begin();
+    }
+
+    protected void commitTx() {
+        if (em.getTransaction().isActive())
+            em.getTransaction().commit();
+    }
+
+    protected void rollbackTx() {
+        if (em.getTransaction().isActive())
+            em.getTransaction().rollback();
+    }
 }
