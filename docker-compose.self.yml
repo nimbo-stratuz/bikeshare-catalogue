@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+
+  bikeshare-catalogue.service:
+    build: .
+    ports:
+    - 8080:8080
+    environment:
+      KUMULUZEE_DATASOURCES0_CONNECTIONURL: jdbc:postgresql://bikeshare-catalogue.db.bikeshare:5432/bikeshare-catalogue
+      KUMULUZEE_CONFIG_ETCD_HOSTS: http://etcd.bikeshare:2379/
+      KUMULUZEE_DISCOVERY_ETCD_HOSTS: http://etcd.bikeshare:2379/
+      KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL: http://etcd.bikeshare:2379/health
+    depends_on:
+    - bikeshare-catalogue.db
+    - etcd
+
+networks:
+  default:
+    external:
+      name: bikeshare
