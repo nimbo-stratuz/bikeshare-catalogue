@@ -22,6 +22,8 @@ kumuluzee:
   discovery:
     etcd:
       hosts: http://localhost:2379
+    ttl: 20
+    ping-interval: 15
 
   health:
     logs:
