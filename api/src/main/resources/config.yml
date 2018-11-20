@@ -37,7 +37,7 @@ kumuluzee:
       etcd-health-check:
         connection-url: http://localhost:2379/health
 
-app-properties:
+bikeshare-config:
   external-services:
     enabled: false
   rest-config:
