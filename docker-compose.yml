@@ -27,10 +27,11 @@ services:
       -cors="*"
 
   bikeshare-rental.service:
-    image: nimbostratuz/bikeshare-rental:0.2
+    build: ../bikeshare-rental
     ports:
     - 8081:8080
     environment:
+      KUMULUZEE_SERVER_BASEURL: http://bikeshare-rental.service:8080
       KUMULUZEE_DATASOURCES0_CONNECTIONURL: jdbc:postgresql://bikeshare-rental.db:5432/bikeshare-rental
       KUMULUZEE_CONFIG_ETCD_HOSTS: http://etcd:2379
       KUMULUZEE_DISCOVERY_ETCD_HOSTS: http://etcd:2379
