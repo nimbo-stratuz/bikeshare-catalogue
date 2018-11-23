@@ -31,7 +31,7 @@ public class BicyclesBean {
         Bicycle bicycle = em.find(Bicycle.class, bicycleId);
 
         if (bicycle == null) {
-            throw new NotFoundException();
+            throw new NotFoundException("Bicycle with id " + bicycleId + " not found");
         }
 
         return bicycle;
@@ -47,7 +47,7 @@ public class BicyclesBean {
         if (!resultList.isEmpty()) {
             return resultList.get(0);
         } else {
-            throw new NotFoundException();
+            throw new NotFoundException("Bicycle with smartLockUUID " + smartLockUUID + " not found");
         }
     }
 
@@ -105,17 +105,17 @@ public class BicyclesBean {
         }
     }
 
-    protected void beginTx() {
+    private void beginTx() {
         if (!em.getTransaction().isActive())
             em.getTransaction().begin();
     }
 
-    protected void commitTx() {
+    private void commitTx() {
         if (em.getTransaction().isActive())
             em.getTransaction().commit();
     }
 
-    protected void rollbackTx() {
+    private void rollbackTx() {
         if (em.getTransaction().isActive())
             em.getTransaction().rollback();
     }
