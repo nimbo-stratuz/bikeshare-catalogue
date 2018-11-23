@@ -20,8 +20,8 @@ kumuluzee:
       hosts: http://localhost:2379
 
   discovery:
-    etcd:
-      hosts: http://localhost:2379
+#    etcd:
+#      hosts: http://localhost:2379
     ttl: 20
     ping-interval: 15
 
