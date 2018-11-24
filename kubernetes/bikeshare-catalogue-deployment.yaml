@@ -13,7 +13,7 @@ spec:
         app: bikeshare-catalogue
     spec:
       containers:
-      - image: nimbostratuz/bikeshare-catalogue:0.3
+      - image: nimbostratuz/bikeshare-catalogue:0.6
         name: bikeshare-catalogue
         env:
         - name: KUMULUZEE_DISCOVERY_CLUSTER
@@ -22,6 +22,8 @@ spec:
           value: http://etcd:2379
         - name: KUMULUZEE_CONFIG_ETCD_HOSTS
           value: http://etcd:2379
+        - name: KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL
+          value: http://etcd:2379/health
         - name: KUMULUZEE_SERVER_BASEURL
           value: http://159.122.186.143:31337
 
@@ -43,12 +45,15 @@ spec:
         - containerPort: 8080
           name: server
           protocol: TCP
-#        livenessProbe:
-#          httpGet:
-#            path: /health
-#            port: server
-#          initialDelaySeconds: 20
-#          periodSeconds: 3
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: server
+          initialDelaySeconds: 20
+          periodSeconds: 3
+
+
 ---
 
 
