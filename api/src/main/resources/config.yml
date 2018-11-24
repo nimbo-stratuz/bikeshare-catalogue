@@ -22,8 +22,6 @@ kumuluzee:
   discovery:
     etcd:
       hosts: http://localhost:2379
-    ttl: 20
-    ping-interval: 15
 
   health:
     logs:
@@ -40,7 +38,6 @@ kumuluzee:
         connection-url: http://localhost:2379/health
 
 bikeshare-config:
-  external-services:
-    enabled: false
   rest-config:
     string-property: value
+  healthy: true
