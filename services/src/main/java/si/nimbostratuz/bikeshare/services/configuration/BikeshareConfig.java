@@ -13,4 +13,6 @@ public class BikeshareConfig {
 
     @ConfigValue(value = "rest-config.string-property", watch = true)
     private String externalServicesEnabled;
+
+    private Boolean healthy;
 }

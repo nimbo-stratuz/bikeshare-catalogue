@@ -38,7 +38,6 @@ kumuluzee:
         connection-url: http://localhost:2379/health
 
 bikeshare-config:
-  external-services:
-    enabled: false
   rest-config:
     string-property: value
+  healthy: true
