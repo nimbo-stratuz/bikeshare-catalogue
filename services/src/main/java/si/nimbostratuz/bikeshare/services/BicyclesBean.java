@@ -17,7 +17,10 @@ import java.util.List;
 public class BicyclesBean {
 
     @Inject
-    protected EntityManager em;
+    private EntityManager em;
+
+    @Inject
+    private RentalsService rentalsService;
 
     public List<Bicycle> getAll() {
 
@@ -33,6 +36,9 @@ public class BicyclesBean {
         if (bicycle == null) {
             throw new NotFoundException("Bicycle with id " + bicycleId + " not found");
         }
+
+        Integer rentalsLimit = 3;
+        bicycle.setRentals(rentalsService.getLastRentalsForBicycle(bicycleId, rentalsLimit).orElse(null));
 
         return bicycle;
     }
