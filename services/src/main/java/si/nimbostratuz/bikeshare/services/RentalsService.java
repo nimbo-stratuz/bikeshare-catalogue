@@ -1,6 +1,7 @@
 package si.nimbostratuz.bikeshare.services;
 
 import com.kumuluz.ee.discovery.annotations.DiscoverService;
+import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
@@ -19,7 +20,7 @@ public class RentalsService {
 
     private Logger log = Logger.getLogger(RentalsService.class.getSimpleName());
 
-    @SuppressWarnings("CdiInjectionPointsInspection")
+    @SuppressWarnings({"CdiInjectionPointsInspection", "OptionalUsedAsFieldOrParameterType"})
     @Inject
     @DiscoverService("bikeshare-rental")
     private Optional<WebTarget> rentalWebTarget;
@@ -31,6 +32,7 @@ public class RentalsService {
                                       .property(ClientProperties.READ_TIMEOUT, 500));
     }
 
+    @Metered
     public Optional<List<RentalDTO>> getLastRentalsForBicycle(Integer bicycleId, Integer limit) {
 
         log.info("rentalWebTarget = " + rentalWebTarget);
