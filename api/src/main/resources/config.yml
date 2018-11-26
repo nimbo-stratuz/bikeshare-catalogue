@@ -46,6 +46,5 @@ kumuluzee:
       url-pattern: /prometheus/*
 
 bikeshare-config:
-  rest-config:
-    string-property: value
+  n-rentals-included: 3
   healthy: true

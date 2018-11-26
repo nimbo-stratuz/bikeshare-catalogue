@@ -2,6 +2,7 @@ package si.nimbostratuz.bikeshare.services;
 
 import lombok.extern.java.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
+import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -22,6 +23,9 @@ public class BicyclesBean {
     @Inject
     private RentalsService rentalsService;
 
+    @Inject
+    private BikeshareConfig bikeshareConfig;
+
     public List<Bicycle> getAll() {
 
         TypedQuery<Bicycle> query = em.createNamedQuery("Bicycle.getAll", Bicycle.class);
@@ -37,8 +41,10 @@ public class BicyclesBean {
             throw new NotFoundException("Bicycle with id " + bicycleId + " not found");
         }
 
-        Integer rentalsLimit = 3;
-        bicycle.setRentals(rentalsService.getLastRentalsForBicycle(bicycleId, rentalsLimit).orElse(null));
+        if (bikeshareConfig.getNRentalsIncluded() > 0) {
+            bicycle.setRentals(rentalsService.getLastRentalsForBicycle(bicycleId, bikeshareConfig.getNRentalsIncluded())
+                                             .orElse(null));
+        }
 
         return bicycle;
     }
