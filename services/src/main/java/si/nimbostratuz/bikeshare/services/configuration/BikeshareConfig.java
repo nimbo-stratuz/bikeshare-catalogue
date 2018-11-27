@@ -11,8 +11,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ConfigBundle("bikeshare-config")
 public class BikeshareConfig {
 
-    @ConfigValue(value = "rest-config.string-property", watch = true)
-    private String externalServicesEnabled;
+    @ConfigValue(value = "n-rentals-included", watch = true)
+    private Integer nRentalsIncluded;
 
     private Boolean healthy;
 }

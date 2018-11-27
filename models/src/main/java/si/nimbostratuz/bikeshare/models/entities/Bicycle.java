@@ -2,9 +2,11 @@ package si.nimbostratuz.bikeshare.models.entities;
 
 import lombok.Data;
 import si.nimbostratuz.bikeshare.models.common.Location;
+import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Entity(name = "bicycle")
 @Data
@@ -38,4 +40,7 @@ public class Bicycle {
 
     @Column(name = "owner_id", nullable = false)
     private Integer ownerId;
+
+    @Transient
+    private List<RentalDTO> rentals;
 }

@@ -64,9 +64,8 @@ public class DemoResource {
                               .add("opis_projekta", "Najin projekt implementira aplikacijo za deljenje in izposojo " +
                                                     "koles z uporabo pametnih ključavnic.")
                               .add("mikrostoritve", Json.createArrayBuilder()
-                                                        // TODO
                                                         .add("http://159.122.186.143:31337/v1/bicycles")
-                                                        .add("http://?.?.?.?:?/v1/rentals"))
+                                                        .add("http://159.122.186.143:30420/v1/rentals"))
                               .add("github", Json.createArrayBuilder()
                                                  .add("https://github.com/nimbo-stratuz/bikeshare-catalogue")
                                                  .add("https://github.com/nimbo-stratuz/bikeshare-rental"))
