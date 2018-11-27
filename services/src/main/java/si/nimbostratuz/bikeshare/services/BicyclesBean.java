@@ -7,6 +7,7 @@ import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -17,7 +18,7 @@ import java.util.List;
 @RequestScoped
 public class BicyclesBean {
 
-    @Inject
+    @PersistenceContext(unitName = "bikeshare-catalogue-jpa")
     private EntityManager em;
 
     @Inject
