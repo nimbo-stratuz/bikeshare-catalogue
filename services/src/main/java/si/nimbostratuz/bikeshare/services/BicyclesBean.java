@@ -30,8 +30,7 @@ public class BicyclesBean {
 
     @PostConstruct
     public void init() {
-        log.info("Clearing and flushing EntityManager");
-        em.flush();
+        log.info("Clearing EntityManager");
         em.clear();
     }
 
