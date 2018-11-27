@@ -4,6 +4,7 @@ import lombok.extern.java.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -26,6 +27,13 @@ public class BicyclesBean {
 
     @Inject
     private BikeshareConfig bikeshareConfig;
+
+    @PostConstruct
+    public void init() {
+        log.info("Clearing and flushing EntityManager");
+        em.flush();
+        em.clear();
+    }
 
     public List<Bicycle> getAll() {
 
