@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -19,7 +18,7 @@ import java.util.List;
 @RequestScoped
 public class BicyclesBean {
 
-    @PersistenceContext(unitName = "bikeshare-catalogue-jpa")
+    @Inject
     private EntityManager em;
 
     @Inject
