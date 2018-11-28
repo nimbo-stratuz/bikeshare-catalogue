@@ -45,6 +45,13 @@ kumuluzee:
     - name: prometheus-endpoint
       url-pattern: /prometheus/*
 
+  logs:
+    loggers:
+    - name: si.nimbostratuz.bikeshare.services.BicyclesBean
+      level: DEBUG
+    - name: ''
+      level: INFO
+
 bikeshare-config:
   n-rentals-included: 3
   healthy: true
