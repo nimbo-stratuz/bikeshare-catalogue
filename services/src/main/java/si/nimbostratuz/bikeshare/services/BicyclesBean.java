@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -34,8 +33,9 @@ public class BicyclesBean {
 
     @PostConstruct
     public void init() {
-        log.debug("Clearing EntityManager");
-        em.clear();
+        long t = System.nanoTime();
+        em.getEntityManagerFactory().getCache().evictAll();
+        log.debug("Cleared EntityManagerFactory cache in {}ms", (double) (System.nanoTime() - t) / 10e6);
     }
 
     public List<Bicycle> getAll() {
@@ -52,9 +52,6 @@ public class BicyclesBean {
         if (bicycle == null) {
             throw new NotFoundException("Bicycle with id " + bicycleId + " not found");
         }
-
-        log.debug("Refreshing bicycle {}", bicycleId);
-        em.refresh(bicycle);
 
         if (bikeshareConfig.getNRentalsIncluded() > 0) {
             bicycle.setRentals(rentalsService.getLastRentalsForBicycle(bicycleId, bikeshareConfig.getNRentalsIncluded())
