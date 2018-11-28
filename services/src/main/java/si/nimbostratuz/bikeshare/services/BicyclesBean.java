@@ -6,7 +6,6 @@ import com.kumuluz.ee.logs.cdi.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -31,12 +30,6 @@ public class BicyclesBean {
     @Inject
     private BikeshareConfig bikeshareConfig;
 
-    @PostConstruct
-    public void init() {
-        long t = System.nanoTime();
-        em.getEntityManagerFactory().getCache().evictAll();
-        log.debug("Cleared EntityManagerFactory cache in {}ms", (double) (System.nanoTime() - t) / 10e6);
-    }
 
     public List<Bicycle> getAll() {
 
