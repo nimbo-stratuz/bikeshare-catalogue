@@ -12,9 +12,17 @@ services:
       KUMULUZEE_CONFIG_ETCD_HOSTS: http://etcd:2379
       KUMULUZEE_DISCOVERY_ETCD_HOSTS: http://etcd:2379
       KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL: http://etcd:2379/health
+      KUMULUZEE_SECURITY_KEYCLOAK_JSON: '{
+                                           "realm": "bikeshare-realm",
+                                           "bearer-only": true,
+                                           "auth-server-url": "http://keycloak:8080/auth",
+                                           "ssl-required": "external",
+                                           "resource": "bikeshare-api"
+                                         }'
     depends_on:
     - bikeshare-catalogue.db
     - etcd
+    - keycloak
 
   bikeshare-catalogue.db:
     image: postgres:alpine
@@ -39,6 +47,14 @@ services:
       -listen-peer-urls http://0.0.0.0:2380
       -initial-cluster node1=http://etcd:2380
       -cors="*"
+
+  keycloak:
+    image: jboss/keycloak
+    ports:
+    - 8082:8080
+    environment:
+      KEYCLOAK_USER: keycloak
+      KEYCLOAK_PASSWORD: keycloak
 
   bikeshare-rental.service:
     build: ../bikeshare-rental

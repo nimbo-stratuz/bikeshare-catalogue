@@ -27,6 +27,7 @@
         <kumuluzee-health.version>1.0.1</kumuluzee-health.version>
         <kumuluzee-discovery.version>1.2.0-SNAPSHOT</kumuluzee-discovery.version>
         <kumuluzee-metrics.version>1.1.1</kumuluzee-metrics.version>
+        <kumuluzee-security.version>1.1.0-SNAPSHOT</kumuluzee-security.version>
 
         <postgresql.version>42.2.5</postgresql.version>
 
@@ -81,6 +82,11 @@
                 <groupId>com.kumuluz.ee.metrics</groupId>
                 <artifactId>kumuluzee-metrics-core</artifactId>
                 <version>${kumuluzee-metrics.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.kumuluz.ee.security</groupId>
+                <artifactId>kumuluzee-security-keycloak</artifactId>
+                <version>${kumuluzee-security.version}</version>
             </dependency>
 
             <dependency>
