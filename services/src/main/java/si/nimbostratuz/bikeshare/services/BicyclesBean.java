@@ -1,14 +1,14 @@
 package si.nimbostratuz.bikeshare.services;
 
-import lombok.extern.java.Log;
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
-import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
@@ -19,7 +19,9 @@ import java.util.List;
 @RequestScoped
 public class BicyclesBean {
 
-    @PersistenceContext(unitName = "bikeshare-catalogue-jpa")
+    private static final Logger log = LogManager.getLogger(BicyclesBean.class.getName());
+
+    @Inject
     private EntityManager em;
 
     @Inject
@@ -28,11 +30,6 @@ public class BicyclesBean {
     @Inject
     private BikeshareConfig bikeshareConfig;
 
-    @PostConstruct
-    public void init() {
-        log.info("Clearing EntityManager");
-        em.clear();
-    }
 
     public List<Bicycle> getAll() {
 
@@ -83,15 +80,15 @@ public class BicyclesBean {
             bicycle.setAvailable(false);
 
             em.persist(bicycle);
-
             commitTx();
+
+            return bicycle;
+
         } catch (Exception e) {
             rollbackTx();
-            log.throwing(BicyclesBean.class.getName(), "create", e);
-            throw new BadRequestException();
+            log.error("create", e);
+            throw new BadRequestException("Could not create bicycle ");
         }
-
-        return bicycle;
     }
 
     public Bicycle update(Integer id, Bicycle bicycle) {
@@ -100,15 +97,19 @@ public class BicyclesBean {
 
         try {
             beginTx();
+
             bicycle.setId(originalBicycle.getId());
+
             bicycle = em.merge(bicycle);
             commitTx();
+
+            return bicycle;
+
         } catch (Exception e) {
             rollbackTx();
-            log.throwing(BicyclesBean.class.getName(), "update", e);
+            log.error("update", e);
+            throw new BadRequestException("Could not update bicycle with id " + id);
         }
-
-        return bicycle;
     }
 
     public void delete(Integer id) {
@@ -121,7 +122,8 @@ public class BicyclesBean {
             commitTx();
         } catch (Exception e) {
             rollbackTx();
-            log.throwing(BicyclesBean.class.getName(), "delete", e);
+            log.error("delete", e);
+            throw new BadRequestException("Could not delete bicycle with id " + id);
         }
     }
 
