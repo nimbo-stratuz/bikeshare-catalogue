@@ -1,5 +1,6 @@
 package si.nimbostratuz.bikeshare.api.v1.resources;
 
+import com.kumuluz.ee.logs.cdi.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.BicyclesBean;
 
@@ -9,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Log
 @ApplicationScoped
 @Path("bicycles")
 @Consumes(MediaType.APPLICATION_JSON)
