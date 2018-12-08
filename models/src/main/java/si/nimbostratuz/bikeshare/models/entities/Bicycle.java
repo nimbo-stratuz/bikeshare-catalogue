@@ -39,7 +39,7 @@ public class Bicycle {
     private Instant dateAdded;
 
     @Column(name = "owner_id", nullable = false)
-    private Integer ownerId;
+    private String ownerId;
 
     @Transient
     private List<RentalDTO> rentals;

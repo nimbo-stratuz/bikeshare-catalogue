@@ -3,6 +3,7 @@ package si.nimbostratuz.bikeshare.services;
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
 import com.kumuluz.ee.logs.cdi.Log;
+import si.nimbostratuz.bikeshare.models.common.AuthenticatedUser;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
@@ -30,6 +31,8 @@ public class BicyclesBean {
     @Inject
     private BikeshareConfig bikeshareConfig;
 
+    @Inject
+    private AuthenticatedUser authenticatedUser;
 
     public List<Bicycle> getAll() {
 
@@ -54,6 +57,7 @@ public class BicyclesBean {
         return bicycle;
     }
 
+
     public Bicycle getBySmartLockUUID(String smartLockUUID) {
 
         TypedQuery<Bicycle> query = em.createNamedQuery("Bicycle.findBySmartLockUUID", Bicycle.class);
@@ -76,6 +80,7 @@ public class BicyclesBean {
         try {
             beginTx();
 
+            bicycle.setOwnerId(authenticatedUser.getId());
             bicycle.setDateAdded(Instant.now());
             bicycle.setAvailable(false);
 
