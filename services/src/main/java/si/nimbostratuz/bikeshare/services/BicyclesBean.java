@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import java.time.Instant;
 import java.util.List;
@@ -100,10 +101,15 @@ public class BicyclesBean {
 
         Bicycle originalBicycle = this.get(id);
 
+        if (!authenticatedUser.owns(originalBicycle)) {
+            throw new ForbiddenException("Bicycle not owned by authenticated user.");
+        }
+
         try {
             beginTx();
 
             bicycle.setId(originalBicycle.getId());
+            bicycle.setOwnerId(originalBicycle.getOwnerId());
 
             bicycle = em.merge(bicycle);
             commitTx();
@@ -120,6 +126,10 @@ public class BicyclesBean {
     public void delete(Integer id) {
 
         Bicycle bicycle = this.get(id);
+
+        if (!authenticatedUser.owns(bicycle)) {
+            throw new ForbiddenException("Bicycle not owned by authenticated user.");
+        }
 
         try {
             beginTx();
