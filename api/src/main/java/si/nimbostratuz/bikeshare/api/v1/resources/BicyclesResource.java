@@ -31,13 +31,13 @@ public class BicyclesResource {
 
     @GET
     @Path("{id}")
-    @RolesAllowed("user")
     public Response getBicycles(@PathParam("id") Integer id) {
 
         return Response.ok(bicyclesBean.get(id)).build();
     }
 
     @POST
+    @RolesAllowed("user")
     public Response createBicycle(Bicycle bicycle) {
 
         return Response.ok(bicyclesBean.create(bicycle)).build();
@@ -45,6 +45,7 @@ public class BicyclesResource {
 
     @PUT
     @Path("{id}")
+    @RolesAllowed("user")
     public Response updateBicycle(@PathParam("id") Integer id, Bicycle bicycle) {
 
         return Response.ok(bicyclesBean.update(id, bicycle)).build();
@@ -52,6 +53,7 @@ public class BicyclesResource {
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed("user")
     public Response deleteBicycle(@PathParam("id") Integer id) {
 
         bicyclesBean.delete(id);

@@ -3,6 +3,7 @@ package si.nimbostratuz.bikeshare.services;
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
 import com.kumuluz.ee.logs.cdi.Log;
+import si.nimbostratuz.bikeshare.models.common.AuthenticatedUser;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
@@ -11,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import java.time.Instant;
 import java.util.List;
@@ -30,6 +32,8 @@ public class BicyclesBean {
     @Inject
     private BikeshareConfig bikeshareConfig;
 
+    @Inject
+    private AuthenticatedUser authenticatedUser;
 
     public List<Bicycle> getAll() {
 
@@ -54,6 +58,7 @@ public class BicyclesBean {
         return bicycle;
     }
 
+
     public Bicycle getBySmartLockUUID(String smartLockUUID) {
 
         TypedQuery<Bicycle> query = em.createNamedQuery("Bicycle.findBySmartLockUUID", Bicycle.class);
@@ -76,6 +81,7 @@ public class BicyclesBean {
         try {
             beginTx();
 
+            bicycle.setOwnerId(authenticatedUser.getId());
             bicycle.setDateAdded(Instant.now());
             bicycle.setAvailable(false);
 
@@ -95,10 +101,15 @@ public class BicyclesBean {
 
         Bicycle originalBicycle = this.get(id);
 
+        if (!authenticatedUser.owns(originalBicycle)) {
+            throw new ForbiddenException("Bicycle not owned by authenticated user.");
+        }
+
         try {
             beginTx();
 
             bicycle.setId(originalBicycle.getId());
+            bicycle.setOwnerId(originalBicycle.getOwnerId());
 
             bicycle = em.merge(bicycle);
             commitTx();
@@ -115,6 +126,10 @@ public class BicyclesBean {
     public void delete(Integer id) {
 
         Bicycle bicycle = this.get(id);
+
+        if (!authenticatedUser.owns(bicycle)) {
+            throw new ForbiddenException("Bicycle not owned by authenticated user.");
+        }
 
         try {
             beginTx();

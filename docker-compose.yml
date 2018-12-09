@@ -13,7 +13,7 @@ services:
       KUMULUZEE_DISCOVERY_ETCD_HOSTS: http://etcd:2379
       KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL: http://etcd:2379/health
       KUMULUZEE_SECURITY_KEYCLOAK_JSON: '{
-                                           "realm": "bikeshare-realm",
+                                           "realm": "bikeshare",
                                            "bearer-only": true,
                                            "auth-server-url": "http://keycloak:8080/auth",
                                            "ssl-required": "external",
