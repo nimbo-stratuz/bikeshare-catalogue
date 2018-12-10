@@ -1,6 +1,9 @@
 package si.nimbostratuz.bikeshare.api.v1.resources;
 
 import com.kumuluz.ee.common.runtime.EeRuntime;
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
 import si.nimbostratuz.bikeshare.api.v1.dtos.HealthDTO;
 import si.nimbostratuz.bikeshare.api.v1.dtos.LoadDTO;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
@@ -12,14 +15,15 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.logging.Logger;
 
+@Log
 @ApplicationScoped
 @Path("demo")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class DemoResource {
-    private Logger log = Logger.getLogger(DemoResource.class.getName());
+
+    private Logger log = LogManager.getLogger(DemoResource.class.getName());
 
     @Inject
     private BikeshareConfig bikeshareConfig;

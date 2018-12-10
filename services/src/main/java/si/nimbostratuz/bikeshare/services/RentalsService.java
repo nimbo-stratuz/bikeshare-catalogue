@@ -8,12 +8,14 @@ import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.faulttolerance.Timeout;
 import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.glassfish.jersey.client.ClientProperties;
+import si.nimbostratuz.bikeshare.models.common.RequestId;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.ProcessingException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import java.time.temporal.ChronoUnit;
@@ -31,12 +33,15 @@ public class RentalsService {
     @DiscoverService("bikeshare-rental")
     private Optional<WebTarget> rentalWebTarget;
 
-    // @PostConstruct
-    // public void init() {
-    //     this.rentalWebTarget = rentalWebTarget.map(
-    //             webTarget -> webTarget.property(ClientProperties.CONNECT_TIMEOUT, 500)
-    //                                   .property(ClientProperties.READ_TIMEOUT, 500));
-    // }
+    @Inject
+    private RequestId requestId;
+
+    @PostConstruct
+    public void init() {
+        this.rentalWebTarget = rentalWebTarget.map(
+                webTarget -> webTarget.property(ClientProperties.CONNECT_TIMEOUT, 500)
+                                      .property(ClientProperties.READ_TIMEOUT, 500));
+    }
 
     @Metered
     @CircuitBreaker(requestVolumeThreshold = 3)
@@ -54,8 +59,10 @@ public class RentalsService {
                                                   .queryParam("where", "bicycleId:EQ:" + bicycleId)
                                                   .queryParam("limit", limit)
                                                   .queryParam("order", "rentStart DESC")
-                                                  .request().get(new GenericType<List<RentalDTO>>() {}));
-            } catch (ProcessingException | WebApplicationException e) {
+                                                  .request()
+                                                  .header("X-Request-ID", requestId.get())
+                                                  .get(new GenericType<List<RentalDTO>>() {}));
+            } catch (ProcessingException e) {
                 log.error("getLastRentalsForBicycle", e);
             }
         } else {

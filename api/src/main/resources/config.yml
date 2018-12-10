@@ -46,21 +46,14 @@ kumuluzee:
       url-pattern: /prometheus/*
 
   logs:
-    loggers:
-    - name: si.nimbostratuz.bikeshare.services.BicyclesBean
-      level: INFO
-    - name: si.nimbostratuz.bikeshare.services.producers.PersistenceProducer
-      level: INFO
-    - name: ''
-      level: INFO
     config-file: '<?xml version="1.0" encoding="UTF-8"?>
                   <Configuration name="customers">
                       <Appenders>
                           <Console name="console" target="SYSTEM_OUT">
                               <PatternLayout pattern="%d %p %marker %m %X %ex %n"/>
                           </Console>
-                          <Socket name="logstash" host="cc0a304a-c4db-4c19-b84f-6005c9f07519-ls.logit.io"
-                                  port="20409" protocol="tcp">
+                          <Socket name="logstash" host="UUID-ls.logit.io"
+                                  port="PORT" protocol="SSL">
                               <JSONLayout complete="false" compact="true" eventEol="true" charset="UTF-8" properties="true"/>
                           </Socket>
                       </Appenders>
