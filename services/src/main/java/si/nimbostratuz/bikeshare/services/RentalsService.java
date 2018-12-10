@@ -6,6 +6,7 @@ import com.kumuluz.ee.logs.Logger;
 import com.kumuluz.ee.logs.cdi.Log;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
+import si.nimbostratuz.bikeshare.models.common.RequestId;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +29,9 @@ public class RentalsService {
     @DiscoverService("bikeshare-rental")
     private Optional<WebTarget> rentalWebTarget;
 
+    @Inject
+    private RequestId requestId;
+
     @PostConstruct
     public void init() {
         this.rentalWebTarget = rentalWebTarget.map(
@@ -48,7 +52,9 @@ public class RentalsService {
                                                   .queryParam("where", "bicycleId:EQ:" + bicycleId)
                                                   .queryParam("limit", limit)
                                                   .queryParam("order", "rentStart DESC")
-                                                  .request().get(new GenericType<List<RentalDTO>>() {}));
+                                                  .request()
+                                                  .header("X-Request-ID", requestId.get())
+                                                  .get(new GenericType<List<RentalDTO>>() {}));
             } catch (ProcessingException e) {
                 log.error("getLastRentalsForBicycle", e);
             }
