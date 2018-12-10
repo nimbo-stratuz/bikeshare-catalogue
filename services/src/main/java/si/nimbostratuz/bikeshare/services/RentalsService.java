@@ -3,6 +3,7 @@ package si.nimbostratuz.bikeshare.services;
 import com.kumuluz.ee.discovery.annotations.DiscoverService;
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.GenericType;
 import java.util.List;
 import java.util.Optional;
 
+@Log
 @ApplicationScoped
 public class RentalsService {
 

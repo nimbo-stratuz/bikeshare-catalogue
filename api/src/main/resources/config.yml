@@ -47,10 +47,6 @@ kumuluzee:
 
   logs:
     loggers:
-    - name: si.nimbostratuz.bikeshare.services.BicyclesBean
-      level: DEBUG
-    - name: si.nimbostratuz.bikeshare.services.producers.PersistenceProducer
-      level: DEBUG
     - name: ''
       level: INFO
 
