@@ -27,6 +27,7 @@ public class LogContextInterceptor {
         settings.put("environmentType", configurationUtil.get("kumuluzee.env.name").orElse(null));
         settings.put("applicationName", configurationUtil.get("kumuluzee.name").orElse(null));
         settings.put("applicationVersion", configurationUtil.get("kumuluzee.version").orElse(null));
+        settings.put("clusterId", configurationUtil.get("kumuluzee.discovery.cluster").orElse(null));
         settings.put("uniqueInstanceId", EeRuntime.getInstance().getInstanceId());
 
         // TODO: Check HTTP headers for existing request UUID
