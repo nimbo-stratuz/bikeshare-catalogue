@@ -14,10 +14,10 @@ public class RequestId {
     }
 
     public void set(String requestId) {
-        if (this.requestId != null) {
+        if (this.requestId == null) {
             this.requestId = requestId;
         } else {
-            log.warn("Attempted to set RequestId twice");
+            log.warn("Attempted to set RequestId twice (value: {}, tried to change to: {})", this.requestId, requestId);
         }
     }
 }
