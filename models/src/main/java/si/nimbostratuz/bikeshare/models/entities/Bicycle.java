@@ -1,7 +1,6 @@
 package si.nimbostratuz.bikeshare.models.entities;
 
 import lombok.Data;
-import si.nimbostratuz.bikeshare.models.common.Location;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
 import javax.persistence.*;
