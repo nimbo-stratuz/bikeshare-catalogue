@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class RequestIdProducer {
 
-    private Logger log = LogManager.getLogger(RequestIdProducer.class.getName());
+    private static final Logger log = LogManager.getLogger(RequestIdProducer.class.getName());
 
     @Inject
     private HttpServletRequest request;
