@@ -69,3 +69,4 @@ kumuluzee:
 bikeshare-config:
   n-rentals-included: 3
   healthy: true
+  rentals-service-timeout: 500
