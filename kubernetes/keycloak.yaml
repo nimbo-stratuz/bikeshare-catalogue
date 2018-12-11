@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - image: jboss/keycloak:4.7.0.Final
+        name: keycloak
+        env:
+        - name: KEYCLOAK_USER
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-user-pass
+              key: keycloak-user
+        - name: KEYCLOAK_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: keycloak-user-pass
+              key: keycloak-password
+        - name: DB_ADDR
+          value: bikeshare-db.cqrqxvxpr2n8.us-east-2.rds.amazonaws.com
+        - name: DB_PORT
+          value: '5432'
+        - name: DB_DATABASE
+          value: bikeshare-keycloak
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-user-pass
+              key: pg-user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-user-pass
+              key: pg-password
+
+        ports:
+        - containerPort: 8080
+          name: server
+          protocol: TCP
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    nodePort: 31007
+  selector:
+    app: keycloak

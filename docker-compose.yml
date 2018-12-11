@@ -15,14 +15,14 @@ services:
       KUMULUZEE_SECURITY_KEYCLOAK_JSON: '{
                                            "realm": "bikeshare",
                                            "bearer-only": true,
-                                           "auth-server-url": "http://keycloak:8080/auth",
+                                           "auth-server-url": "http://159.122.186.143:31007/auth",
                                            "ssl-required": "external",
                                            "resource": "bikeshare-api"
                                          }'
     depends_on:
     - bikeshare-catalogue.db
     - etcd
-    - keycloak
+  #    - keycloak
 
   bikeshare-catalogue.db:
     image: postgres:alpine
@@ -48,16 +48,16 @@ services:
       -initial-cluster node1=http://etcd:2380
       -cors="*"
 
-  keycloak:
-    image: jboss/keycloak
-    ports:
-    - 8082:8080
-    environment:
-      KEYCLOAK_USER: keycloak
-      KEYCLOAK_PASSWORD: keycloak
-      KEYCLOAK_IMPORT: /tmp/bikeshare-realm.json
-    volumes:
-    - ./bikeshare-realm.json:/tmp/bikeshare-realm.json
+  #  keycloak:
+  #    image: jboss/keycloak
+  #    ports:
+  #    - 8082:8080
+  #    environment:
+  #      KEYCLOAK_USER: keycloak
+  #      KEYCLOAK_PASSWORD: keycloak
+  #      KEYCLOAK_IMPORT: /tmp/bikeshare-realm.json
+  #    volumes:
+  #    - ./bikeshare-realm.json:/tmp/bikeshare-realm.json
 
   bikeshare-rental.service:
     image: nimbostratuz/bikeshare-rental:0.14
