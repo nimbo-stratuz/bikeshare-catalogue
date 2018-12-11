@@ -20,11 +20,6 @@ public class PersistenceProducer {
     @Produces
     @RequestScoped
     public EntityManager getEntityManager() {
-
-        long t = System.nanoTime();
-        emf.getCache().evictAll();
-        log.debug("Cleared EntityManagerFactory cache in {}ms", (double) (System.nanoTime() - t) / 10e6);
-
         return emf.createEntityManager();
     }
 

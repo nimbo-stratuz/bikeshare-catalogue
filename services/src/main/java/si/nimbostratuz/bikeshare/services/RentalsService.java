@@ -26,7 +26,7 @@ import java.util.Optional;
 @ApplicationScoped
 public class RentalsService {
 
-    private static Logger log = LogManager.getLogger(RentalsService.class.getSimpleName());
+    private static final Logger log = LogManager.getLogger(RentalsService.class.getSimpleName());
 
     @SuppressWarnings({"CdiInjectionPointsInspection", "OptionalUsedAsFieldOrParameterType"})
     @Inject
