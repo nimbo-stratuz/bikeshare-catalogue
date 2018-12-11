@@ -3,8 +3,10 @@ package si.nimbostratuz.bikeshare.services;
 import com.kumuluz.ee.discovery.annotations.DiscoverService;
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
+import com.kumuluz.ee.logs.cdi.Log;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
+import si.nimbostratuz.bikeshare.models.common.RequestId;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.GenericType;
 import java.util.List;
 import java.util.Optional;
 
+@Log
 @ApplicationScoped
 public class RentalsService {
 
@@ -25,6 +28,9 @@ public class RentalsService {
     @Inject
     @DiscoverService("bikeshare-rental")
     private Optional<WebTarget> rentalWebTarget;
+
+    @Inject
+    private RequestId requestId;
 
     @PostConstruct
     public void init() {
@@ -46,7 +52,9 @@ public class RentalsService {
                                                   .queryParam("where", "bicycleId:EQ:" + bicycleId)
                                                   .queryParam("limit", limit)
                                                   .queryParam("order", "rentStart DESC")
-                                                  .request().get(new GenericType<List<RentalDTO>>() {}));
+                                                  .request()
+                                                  .header("X-Request-ID", requestId.get())
+                                                  .get(new GenericType<List<RentalDTO>>() {}));
             } catch (ProcessingException e) {
                 log.error("getLastRentalsForBicycle", e);
             }

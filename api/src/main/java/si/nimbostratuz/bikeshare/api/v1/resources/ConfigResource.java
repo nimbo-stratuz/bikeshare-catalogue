@@ -1,15 +1,17 @@
 package si.nimbostratuz.bikeshare.api.v1.resources;
 
-import si.nimbostratuz.bikeshare.models.entities.Bicycle;
-import si.nimbostratuz.bikeshare.services.BicyclesBean;
+import com.kumuluz.ee.logs.cdi.Log;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@Log
 @ApplicationScoped
 @Path("config")
 @Produces(MediaType.TEXT_PLAIN)
