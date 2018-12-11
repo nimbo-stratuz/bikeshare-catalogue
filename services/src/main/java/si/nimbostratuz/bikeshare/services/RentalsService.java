@@ -6,6 +6,7 @@ import com.kumuluz.ee.logs.Logger;
 import com.kumuluz.ee.logs.cdi.Log;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
+import org.keycloak.KeycloakSecurityContext;
 import si.nimbostratuz.bikeshare.models.common.RequestId;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
@@ -15,6 +16,8 @@ import javax.inject.Inject;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +35,9 @@ public class RentalsService {
     @Inject
     private RequestId requestId;
 
+    @Inject
+    private KeycloakSecurityContext securityContext;
+
     @PostConstruct
     public void init() {
         this.rentalWebTarget = rentalWebTarget.map(
@@ -45,6 +51,10 @@ public class RentalsService {
         log.debug("rentalWebTarget: {}", rentalWebTarget.map(wt -> wt.getUri().toString())
                                                         .orElse("None"));
 
+        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
+        headers.putSingle("X-Request-ID", requestId.get());
+        headers.putSingle("Authorization", "Bearer " + securityContext.getTokenString());
+
         if (rentalWebTarget.isPresent()) {
             try {
                 return Optional.of(rentalWebTarget.get().path("v1")
@@ -53,7 +63,7 @@ public class RentalsService {
                                                   .queryParam("limit", limit)
                                                   .queryParam("order", "rentStart DESC")
                                                   .request()
-                                                  .header("X-Request-ID", requestId.get())
+                                                  .headers(headers)
                                                   .get(new GenericType<List<RentalDTO>>() {}));
             } catch (ProcessingException e) {
                 log.error("getLastRentalsForBicycle", e);
