@@ -47,14 +47,18 @@ public class RentalsService {
 
         if (rentalWebTarget.isPresent()) {
             try {
-                return Optional.of(rentalWebTarget.get().path("v1")
-                                                  .path("rentals")
-                                                  .queryParam("where", "bicycleId:EQ:" + bicycleId)
-                                                  .queryParam("limit", limit)
-                                                  .queryParam("order", "rentStart DESC")
-                                                  .request()
-                                                  .header("X-Request-ID", requestId.get())
-                                                  .get(new GenericType<List<RentalDTO>>() {}));
+
+                var rentals = rentalWebTarget.get().path("v1")
+                                             .path("rentals")
+                                             .queryParam("where", "bicycleId:EQ:" + bicycleId)
+                                             .queryParam("limit", limit)
+                                             .queryParam("order", "rentStart DESC")
+                                             .request()
+                                             .header("X-Request-ID", requestId.get())
+                                             .get(new GenericType<List<RentalDTO>>() {});
+
+                return Optional.of(rentals);
+
             } catch (ProcessingException e) {
                 log.error("getLastRentalsForBicycle", e);
             }
