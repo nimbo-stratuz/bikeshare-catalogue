@@ -27,7 +27,7 @@ spec:
               name: keycloak-user-pass
               key: keycloak-password
         - name: DB_ADDR
-          value: bikeshare-db.cqrqxvxpr2n8.us-east-2.rds.amazonaws.com
+          value: postgres
         - name: DB_PORT
           value: '5432'
         - name: DB_DATABASE
