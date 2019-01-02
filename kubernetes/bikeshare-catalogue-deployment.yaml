@@ -25,7 +25,7 @@ spec:
         - name: KUMULUZEE_HEALTH_CHECKS_ETCDHEALTHCHECK_CONNECTIONURL
           value: http://etcd:2379/health
         - name: KUMULUZEE_SERVER_BASEURL
-          value: http://159.122.186.143:31337
+          value: http://159.122.186.200:31337
 
         # Database
         - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
