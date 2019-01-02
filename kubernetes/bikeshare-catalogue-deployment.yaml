@@ -29,7 +29,7 @@ spec:
 
         # Database
         - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
-          value: jdbc:postgresql://bikeshare-db.cqrqxvxpr2n8.us-east-2.rds.amazonaws.com:5432/bikeshare-catalogue
+          value: jdbc:postgresql://postgres:5432/bikeshare-catalogue
         - name: KUMULUZEE_DATASOURCES0_USERNAME
           valueFrom:
             secretKeyRef:
