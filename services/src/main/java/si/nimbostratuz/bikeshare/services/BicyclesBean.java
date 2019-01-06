@@ -38,6 +38,20 @@ public class BicyclesBean {
         return query.getResultList();
     }
 
+    public Bicycle getClosest(Long latitude, Long longitude) {
+
+        TypedQuery<Bicycle> query = em.createNamedQuery("Bicycle.findClosest", Bicycle.class);
+
+        query.setParameter("latitude", latitude);
+        query.setParameter("longitude", longitude);
+
+        if (query.getResultList().size() == 0) {
+            throw new NotFoundException("No bicycles.");
+        }
+
+        return query.getResultList().get(0);
+    }
+
     public Bicycle get(Integer bicycleId) {
 
         Bicycle bicycle = em.find(Bicycle.class, bicycleId);

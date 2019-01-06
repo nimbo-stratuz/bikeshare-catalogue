@@ -21,7 +21,12 @@ public class BicyclesResource {
     private BicyclesBean bicyclesBean;
 
     @GET
-    public Response getBicycles() {
+    public Response getBicycles(@QueryParam("latitude") Long latitude,
+                                @QueryParam("longitude") Long longitude) {
+
+        if (latitude != null && longitude != null) {
+            return Response.ok(bicyclesBean.getClosest(latitude, longitude)).build();
+        }
 
         return Response.ok(bicyclesBean.getAll()).build();
     }

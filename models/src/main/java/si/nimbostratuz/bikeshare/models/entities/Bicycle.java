@@ -17,6 +17,16 @@ import java.util.List;
         @NamedQuery(
                 name = "Bicycle.findBySmartLockUUID",
                 query = "SELECT o FROM bicycle o WHERE o.smartLockUUID = :smartLockUUID"
+        ),
+        @NamedQuery(
+                name = "Bicycle.findClosest",
+                query = "SELECT \n" +
+                        "    b, \n" +
+                        "    (b.location.latitude - :latitude) * (b.location.latitude - :latitude) + \n" +
+                        "    (b.location.longitude - :longitude) * (b.location.longitude - :longitude) as distance \n" +
+                        "FROM bicycle b\n" +
+                        "WHERE b.available = true \n" +
+                        "ORDER BY distance"
         )
 })
 public class Bicycle {
