@@ -26,28 +26,20 @@ spec:
             secretKeyRef:
               name: keycloak-user-pass
               key: keycloak-password
-        - name: DB_ADDR
-          value: postgres
-        - name: DB_PORT
-          value: '5432'
-        - name: DB_DATABASE
-          value: bikeshare-keycloak
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: db-user-pass
-              key: pg-user
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-user-pass
-              key: pg-password
+        - name: DB_VENDOR
+          value: h2
 
         ports:
         - containerPort: 8080
           name: server
           protocol: TCP
+        volumeMounts:
+        - mountPath: /etcd-data
+          name: etcddata
 
+      volumes:
+      - name: etcddata
+        emptyDir: {}
 
 ---
 
