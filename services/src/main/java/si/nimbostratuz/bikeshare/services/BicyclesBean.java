@@ -144,17 +144,26 @@ public class BicyclesBean {
     }
 
     private void beginTx() {
-        if (!em.getTransaction().isActive())
+        if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
+        } else {
+            log.warn("Call to beginTx while there is an active transaction.");
+        }
     }
 
     private void commitTx() {
-        if (em.getTransaction().isActive())
+        if (em.getTransaction().isActive()) {
             em.getTransaction().commit();
+        } else {
+            log.warn("Call to commitTx while there is no active transactions.");
+        }
     }
 
     private void rollbackTx() {
-        if (em.getTransaction().isActive())
+        if (em.getTransaction().isActive()) {
             em.getTransaction().rollback();
+        } else {
+            log.warn("Call to rollbackTx while there is no active transactions.");
+        }
     }
 }
