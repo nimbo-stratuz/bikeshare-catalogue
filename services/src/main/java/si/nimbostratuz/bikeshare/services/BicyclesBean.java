@@ -38,18 +38,20 @@ public class BicyclesBean {
         return query.getResultList();
     }
 
-    public Bicycle getClosest(Long latitude, Long longitude) {
+    public Bicycle getClosest(Double latitude, Double longitude) {
 
         TypedQuery<Bicycle> query = em.createNamedQuery("Bicycle.findClosest", Bicycle.class);
 
         query.setParameter("latitude", latitude);
         query.setParameter("longitude", longitude);
 
-        if (query.getResultList().size() == 0) {
-            throw new NotFoundException("No bicycles.");
+        List<Bicycle> bicycles = query.getResultList();
+
+        if (bicycles.size() == 0) {
+            throw new NotFoundException("No closest bicycle");
         }
 
-        return query.getResultList().get(0);
+        return bicycles.get(0);
     }
 
     public Bicycle get(Integer bicycleId) {
@@ -91,7 +93,7 @@ public class BicyclesBean {
             beginTx();
 
             bicycle.setDateAdded(Instant.now());
-            bicycle.setAvailable(false);
+            bicycle.setAvailable(true);
 
             em.persist(bicycle);
             commitTx();

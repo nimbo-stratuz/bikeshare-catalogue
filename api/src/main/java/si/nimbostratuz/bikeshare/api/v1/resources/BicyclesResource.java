@@ -1,5 +1,7 @@
 package si.nimbostratuz.bikeshare.api.v1.resources;
 
+import com.kumuluz.ee.logs.LogManager;
+import com.kumuluz.ee.logs.Logger;
 import com.kumuluz.ee.logs.cdi.Log;
 import si.nimbostratuz.bikeshare.models.entities.Bicycle;
 import si.nimbostratuz.bikeshare.services.BicyclesBean;
@@ -17,12 +19,16 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class BicyclesResource {
 
+    private static Logger log = LogManager.getLogger(BicyclesResource.class.getName());
+
     @Inject
     private BicyclesBean bicyclesBean;
 
     @GET
-    public Response getBicycles(@QueryParam("latitude") Long latitude,
-                                @QueryParam("longitude") Long longitude) {
+    public Response getBicycles(@QueryParam("latitude") Double latitude,
+                                @QueryParam("longitude") Double longitude) {
+
+        log.info(latitude + " | " + longitude);
 
         if (latitude != null && longitude != null) {
             return Response.ok(bicyclesBean.getClosest(latitude, longitude)).build();
