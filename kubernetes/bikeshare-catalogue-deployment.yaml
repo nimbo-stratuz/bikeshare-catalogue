@@ -13,7 +13,7 @@ spec:
         app: bikeshare-catalogue
     spec:
       containers:
-      - image: nimbostratuz/bikeshare-catalogue:0.21
+      - image: nimbostratuz/bikeshare-catalogue:0.22
         name: bikeshare-catalogue
         env:
         - name: KUMULUZEE_DISCOVERY_CLUSTER
