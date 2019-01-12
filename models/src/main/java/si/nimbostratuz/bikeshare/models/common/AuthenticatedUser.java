@@ -10,6 +10,8 @@ public class AuthenticatedUser {
 
     private String username;
 
+    private String authorizationToken;
+
     public boolean owns(Bicycle bicycle) {
         return this.id.equals(bicycle.getOwnerId());
     }

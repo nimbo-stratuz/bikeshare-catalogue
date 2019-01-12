@@ -8,7 +8,7 @@ import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
 import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
-import org.keycloak.KeycloakSecurityContext;
+import si.nimbostratuz.bikeshare.models.common.AuthenticatedUser;
 import si.nimbostratuz.bikeshare.models.common.RequestId;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
@@ -39,7 +39,7 @@ public class RentalsService {
     private RequestId requestId;
 
     @Inject
-    private KeycloakSecurityContext securityContext;
+    private AuthenticatedUser user;
 
     @PostConstruct
     public void init() {
@@ -66,6 +66,7 @@ public class RentalsService {
                                          .queryParam("order", "rentStart DESC")
                                          .request()
                                          .header("X-Request-ID", requestId.get())
+                                         .header("Authorization", "Bearer " + user.getAuthorizationToken())
                                          .property(ClientProperties.CONNECT_TIMEOUT, config.getRentalsServiceTimeout())
                                          .property(ClientProperties.READ_TIMEOUT, config.getRentalsServiceTimeout())
                                          .get(new GenericType<List<RentalDTO>>() {});

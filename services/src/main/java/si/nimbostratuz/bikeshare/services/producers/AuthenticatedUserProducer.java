@@ -1,5 +1,6 @@
 package si.nimbostratuz.bikeshare.services.producers;
 
+import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 import si.nimbostratuz.bikeshare.models.common.AuthenticatedUser;
 
@@ -13,6 +14,9 @@ public class AuthenticatedUserProducer {
     @Inject
     private AccessToken accessToken;
 
+    @Inject
+    private KeycloakSecurityContext securityContext;
+
     @Produces
     @RequestScoped
     public AuthenticatedUser getAuthenticatedUser() {
@@ -21,6 +25,7 @@ public class AuthenticatedUserProducer {
 
         user.setId(accessToken.getSubject());
         user.setUsername(accessToken.getPreferredUsername());
+        user.setAuthorizationToken(securityContext.getTokenString());
 
         return user;
     }
