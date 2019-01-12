@@ -1,7 +1,6 @@
 package si.nimbostratuz.bikeshare.models.entities;
 
 import lombok.Data;
-import si.nimbostratuz.bikeshare.models.common.Location;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
 
 import javax.persistence.*;
@@ -18,6 +17,14 @@ import java.util.List;
         @NamedQuery(
                 name = "Bicycle.findBySmartLockUUID",
                 query = "SELECT o FROM bicycle o WHERE o.smartLockUUID = :smartLockUUID"
+        ),
+        @NamedQuery(
+                name = "Bicycle.findClosest",
+                query = "SELECT b \n" +
+                        "FROM bicycle b\n" +
+                        "WHERE b.available = true\n" +
+                        "ORDER BY (b.location.latitude - :latitude) * (b.location.latitude - :latitude) +\n" +
+                        "         (b.location.longitude - :longitude) * (b.location.longitude - :longitude)"
         )
 })
 public class Bicycle {

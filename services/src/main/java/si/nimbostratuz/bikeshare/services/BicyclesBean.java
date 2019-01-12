@@ -42,6 +42,22 @@ public class BicyclesBean {
         return query.getResultList();
     }
 
+    public Bicycle getClosest(Double latitude, Double longitude) {
+
+        TypedQuery<Bicycle> query = em.createNamedQuery("Bicycle.findClosest", Bicycle.class);
+
+        query.setParameter("latitude", latitude);
+        query.setParameter("longitude", longitude);
+
+        List<Bicycle> bicycles = query.getResultList();
+
+        if (bicycles.size() == 0) {
+            throw new NotFoundException("No closest bicycle");
+        }
+
+        return bicycles.get(0);
+    }
+
     public Bicycle get(Integer bicycleId) {
 
         Bicycle bicycle = em.find(Bicycle.class, bicycleId);
@@ -83,7 +99,7 @@ public class BicyclesBean {
 
             bicycle.setOwnerId(authenticatedUser.getId());
             bicycle.setDateAdded(Instant.now());
-            bicycle.setAvailable(false);
+            bicycle.setAvailable(true);
 
             em.persist(bicycle);
             commitTx();
@@ -143,17 +159,26 @@ public class BicyclesBean {
     }
 
     private void beginTx() {
-        if (!em.getTransaction().isActive())
+        if (!em.getTransaction().isActive()) {
             em.getTransaction().begin();
+        } else {
+            log.warn("Call to beginTx while there is an active transaction.");
+        }
     }
 
     private void commitTx() {
-        if (em.getTransaction().isActive())
+        if (em.getTransaction().isActive()) {
             em.getTransaction().commit();
+        } else {
+            log.warn("Call to commitTx while there is no active transactions.");
+        }
     }
 
     private void rollbackTx() {
-        if (em.getTransaction().isActive())
+        if (em.getTransaction().isActive()) {
             em.getTransaction().rollback();
+        } else {
+            log.warn("Call to rollbackTx while there is no active transactions.");
+        }
     }
 }

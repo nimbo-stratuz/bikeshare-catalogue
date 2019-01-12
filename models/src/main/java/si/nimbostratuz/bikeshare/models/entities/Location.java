@@ -1,4 +1,4 @@
-package si.nimbostratuz.bikeshare.models.common;
+package si.nimbostratuz.bikeshare.models.entities;
 
 import lombok.Data;
 

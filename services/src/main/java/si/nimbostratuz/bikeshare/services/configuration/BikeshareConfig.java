@@ -15,4 +15,7 @@ public class BikeshareConfig {
     private Integer nRentalsIncluded;
 
     private Boolean healthy;
+
+    @ConfigValue(value = "rentals-service-timeout", watch = true)
+    private Integer rentalsServiceTimeout;
 }

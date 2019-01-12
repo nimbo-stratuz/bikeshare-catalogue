@@ -4,20 +4,20 @@ import com.kumuluz.ee.discovery.annotations.DiscoverService;
 import com.kumuluz.ee.logs.LogManager;
 import com.kumuluz.ee.logs.Logger;
 import com.kumuluz.ee.logs.cdi.Log;
+import org.eclipse.microprofile.faulttolerance.CircuitBreaker;
+import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.metrics.annotation.Metered;
 import org.glassfish.jersey.client.ClientProperties;
 import org.keycloak.KeycloakSecurityContext;
 import si.nimbostratuz.bikeshare.models.common.RequestId;
 import si.nimbostratuz.bikeshare.models.dtos.RentalDTO;
+import si.nimbostratuz.bikeshare.services.configuration.BikeshareConfig;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +33,9 @@ public class RentalsService {
     private Optional<WebTarget> rentalWebTarget;
 
     @Inject
+    private BikeshareConfig config;
+
+    @Inject
     private RequestId requestId;
 
     @Inject
@@ -46,32 +49,37 @@ public class RentalsService {
     }
 
     @Metered
+    @CircuitBreaker(requestVolumeThreshold = 3)
+    @Fallback(fallbackMethod = "getLastRentalsForBicycleFallback")
     public Optional<List<RentalDTO>> getLastRentalsForBicycle(Integer bicycleId, Integer limit) {
+
+        log.info("Using main method for {}.getLastRentalsForBicycle", RentalsService.class.getSimpleName());
 
         log.debug("rentalWebTarget: {}", rentalWebTarget.map(wt -> wt.getUri().toString())
                                                         .orElse("None"));
 
-        MultivaluedMap<String, Object> headers = new MultivaluedHashMap<>();
-        headers.putSingle("X-Request-ID", requestId.get());
-        headers.putSingle("Authorization", "Bearer " + securityContext.getTokenString());
-
         if (rentalWebTarget.isPresent()) {
-            try {
-                return Optional.of(rentalWebTarget.get().path("v1")
-                                                  .path("rentals")
-                                                  .queryParam("where", "bicycleId:EQ:" + bicycleId)
-                                                  .queryParam("limit", limit)
-                                                  .queryParam("order", "rentStart DESC")
-                                                  .request()
-                                                  .headers(headers)
-                                                  .get(new GenericType<List<RentalDTO>>() {}));
-            } catch (ProcessingException e) {
-                log.error("getLastRentalsForBicycle", e);
-            }
+            var rentals = rentalWebTarget.get().path("v1")
+                                         .path("rentals")
+                                         .queryParam("where", "bicycleId:EQ:" + bicycleId)
+                                         .queryParam("limit", limit)
+                                         .queryParam("order", "rentStart DESC")
+                                         .request()
+                                         .header("X-Request-ID", requestId.get())
+                                         .property(ClientProperties.CONNECT_TIMEOUT, config.getRentalsServiceTimeout())
+                                         .property(ClientProperties.READ_TIMEOUT, config.getRentalsServiceTimeout())
+                                         .get(new GenericType<List<RentalDTO>>() {});
+
+            return Optional.of(rentals);
         } else {
             log.warn("bikeshare-rentals cannot be discovered");
         }
 
+        return Optional.empty();
+    }
+
+    public Optional<List<RentalDTO>> getLastRentalsForBicycleFallback(Integer bicycleId, Integer limit) {
+        log.info("Using fallback for {}.getLastRentalsForBicycle", RentalsService.class.getSimpleName());
         return Optional.empty();
     }
 }
